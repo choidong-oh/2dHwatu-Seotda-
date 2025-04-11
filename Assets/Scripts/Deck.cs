@@ -7,7 +7,7 @@ public class Deck : MonoBehaviour
 {
     Card card;
     public GameObject[] DeckPrefab; //20jang  
-    List<Card> usedeck = new List<Card>();
+    List<int> usedeck = new List<int>();
     public Transform[] cardSpawnPositions;
 
     private void Start()
@@ -16,13 +16,13 @@ public class Deck : MonoBehaviour
     }
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            Debug.Log("0번째 카드 숫자 : " + usedeck[0].cardNum);
-            Debug.Log("0번째 카드 광인지 : " + usedeck[0].isGwang);
-            Debug.Log("마지막째 카드 숫자 : " + DrawCard().cardNum);
-            Debug.Log("마지막째 카드 숫자 : " + DrawCard().isGwang);
-        }
+        //if (Input.GetKeyDown(KeyCode.Q))
+        //{
+        //    Debug.Log("0번째 카드 숫자 : " + usedeck[0].cardNum);
+        //    Debug.Log("0번째 카드 광인지 : " + usedeck[0].isGwang);
+        //    Debug.Log("마지막째 카드 숫자 : " + DrawCard().cardNum);
+        //    Debug.Log("마지막째 카드 숫자 : " + DrawCard().isGwang);
+        //}
        
 
 
@@ -36,32 +36,23 @@ public class Deck : MonoBehaviour
         usedeck.Clear();
 
         //덱 추가
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < 20; i++)
         {
-            for ( int j = 0; j <= 10; j++)
-            {
-                card = new Card();
-                card.cardNum = j;
-                usedeck.Add(card);
-            }
+            usedeck.Add(i);   
         }
-
-        usedeck[0].isGwang = true;
-        usedeck[4].isGwang = true;
-        usedeck[15].isGwang = true;
 
         //피셔예이츠 랜덤부여
         for (int i = usedeck.Count - 1; i > 0; i--)
         {
             int j = Random.Range(0, i + 1);
-            Card temp = usedeck[i];
+            var temp = usedeck[i];
             usedeck[i] = usedeck[j];
             usedeck[j] = temp;
         }
     }
 
     //덱 드로우
-    Card DrawCard()
+    int DrawCard()
     { 
         //마지막패 뽑는거 반환
         var temp = usedeck.Last();
@@ -70,15 +61,15 @@ public class Deck : MonoBehaviour
     }
 
     //카드 생성
-    void SpawnCard(Card card, Transform spawnPos)
+    void SpawnCard(int cardNum, Transform spawnPos)
     {
-        int prefabIndex = card.cardNum; 
-        Instantiate(DeckPrefab[prefabIndex], spawnPos.position, Quaternion.identity);
+        int prefabIndex = cardNum; 
+        Instantiate(DeckPrefab[prefabIndex], spawnPos.position, spawnPos.rotation);
     }
 
     public void SpawnCardBtn()
     {
-        Card card = DrawCard();
+        int card = DrawCard();
         SpawnCard(card, cardSpawnPositions[0]);
     }
 
