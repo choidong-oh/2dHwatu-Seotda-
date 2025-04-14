@@ -8,10 +8,14 @@ public class Deck : MonoBehaviour
     public GameObject[] DeckPrefab; //20장
     List<int> usedeck = new List<int>(); //덱
     public List<Card> myCard = new List<Card>(); //내카드
-    public Transform[] cardSpawnPositions; //카드 놓는 위치
-    int CardPostionArrayNum = 0; //놓는위치 배열
+    public List<Card> AiCard = new List<Card>(); //Ai카드
+
+    public Transform[] PlayerCardSpawnPositions; //player카드 놓는 위치
+    int PlayerCardPostionArrayNum = 0; //놓는위치 배열
+    public Transform[] AiCardSpawnPositions; //ai카드 놓는 위치
+    int AiCardPostionArrayNum = 0; //놓는위치 배열
+
     public event Action<int, bool> cardNumUi; //확인용 UI
-    public event Action<int> testJokboPointUi; //확인용 UI
     Card cardScript;
 
     private void Start()
@@ -63,13 +67,15 @@ public class Deck : MonoBehaviour
     }
 
     //카드 생성 자식객체에 생성
-    void SpawnCard(int cardNum, Transform spawnPos)
+    void SpawnCard(bool isPlayer, int cardNum, Transform spawnPos)
     {
         int prefabIndex = cardNum;
         GameObject cardObj = Instantiate(DeckPrefab[prefabIndex], spawnPos.position, spawnPos.rotation, spawnPos);
 
         cardScript = cardObj.GetComponent<Card>();
-        myCard.Add(cardScript);
+        
+        //ai인지, player인지
+        (isPlayer ? myCard : AiCard).Add(cardScript);
 
         //ui용 이벤트
         cardNumUi?.Invoke(cardScript.cardNum, cardScript.isGwang);
@@ -77,15 +83,26 @@ public class Deck : MonoBehaviour
     }
 
     //버튼 이벤트 추가시 0,1 이런식으로 인자값쓰면댐
-    public void SpawnCardBtn()
+    public void PlayerSpawnCardBtn()
     {
-        if (CardPostionArrayNum >= 2)
+        if (PlayerCardPostionArrayNum >= 2)
         {
-            CardPostionArrayNum = 0;
+            PlayerCardPostionArrayNum = 0;
         }
         int card = DrawCard();
-        SpawnCard(card, cardSpawnPositions[CardPostionArrayNum]);
-        CardPostionArrayNum++;
+        SpawnCard(true,card, PlayerCardSpawnPositions[PlayerCardPostionArrayNum]);
+        PlayerCardPostionArrayNum++;
+    }
+
+    public void AiSpawnCardBtn()
+    {
+        if (AiCardPostionArrayNum >= 2)
+        {
+            AiCardPostionArrayNum = 0;
+        }
+        int card = DrawCard();
+        SpawnCard(false,card, AiCardSpawnPositions[AiCardPostionArrayNum]);
+        AiCardPostionArrayNum++;
     }
 
     void ResetCard()
@@ -94,12 +111,22 @@ public class Deck : MonoBehaviour
         usedeck.Clear();
         //내카드 초기화
         myCard.Clear();
+        //Ai카드 초기화
+        AiCard.Clear();
+
+
         //ui용 이벤트
         cardNumUi?.Invoke(0, false);
-        testJokboPointUi?.Invoke(0);
 
         // 카드 위치에 있는 자식 오브젝트 전부 삭제
-        foreach (Transform spawn in cardSpawnPositions)
+        foreach (Transform spawn in PlayerCardSpawnPositions)
+        {
+            for (int i = spawn.childCount - 1; i >= 0; i--)
+            {
+                Destroy(spawn.GetChild(i).gameObject);
+            }
+        }
+        foreach (Transform spawn in AiCardSpawnPositions)
         {
             for (int i = spawn.childCount - 1; i >= 0; i--)
             {
@@ -107,15 +134,9 @@ public class Deck : MonoBehaviour
             }
         }
 
+
     }
 
-    public void testJokboPoint()
-    {
-        int JokboPoint = myCard[0].cardNum + myCard[1].cardNum;
-
-        //ui용 이벤트
-        testJokboPointUi?.Invoke(JokboPoint);
-    }
 
 
 }

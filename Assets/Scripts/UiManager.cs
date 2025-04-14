@@ -6,19 +6,26 @@ public class UiManager : MonoBehaviour
     public TextMeshProUGUI cardNum1;
     public TextMeshProUGUI cardNum2;
     public TextMeshProUGUI jokboPoint;
-    [SerializeField] Deck deck;
-    
+    public TextMeshProUGUI AiJokboPoint;
+    public TextMeshProUGUI Winner;
 
+    public TextMeshProUGUI PlayerMoney;
+    [SerializeField] Deck deck;
+
+    private void Update()
+    {
+        PlayerMoney.text = "PlayerMoney : " + Player.PlayerMoney.ToString();
+
+
+    }
     private void OnEnable()
     {
         deck.cardNumUi += UpdateCard;
-        deck.testJokboPointUi += TotalJokboPoint;
     }
 
     private void OnDisable()
     {
         deck.cardNumUi -= UpdateCard;
-        deck.testJokboPointUi -= TotalJokboPoint;
     }
 
 
@@ -39,8 +46,19 @@ public class UiManager : MonoBehaviour
         }
     }
 
-    void TotalJokboPoint(int TestPoint)
+    public void TotalJokboPoint(int TestPoint)
     {
         jokboPoint.text = TestPoint.ToString();
     }
+    public void AiTotalJokboPoint(int TestPoint)
+    {
+        AiJokboPoint.text = TestPoint.ToString();
+    }
+    public void WhoWinner(int playerPoint, int aiPoint)
+    {
+        string winner = playerPoint > aiPoint ? "PlayerWin" : (playerPoint < aiPoint ? "AiWin" : "Draw");
+
+        Winner.text = winner.ToString();
+    }
+
 }
