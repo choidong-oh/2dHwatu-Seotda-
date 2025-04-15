@@ -18,6 +18,19 @@ public class Deck : MonoBehaviour
     public event Action<int, bool> cardNumUi; //확인용 UI
     Card cardScript;
 
+    [Header("테스트용 카드 value")]
+    [SerializeField] int cardNum1;
+    [SerializeField] bool cardNumIsGwang1;
+    [SerializeField] int cardNum2;
+    [SerializeField] bool cardNumIsGwang2;
+
+    [SerializeField] int aicardNum1;
+    [SerializeField] bool aicardNumIsGwang1;
+    [SerializeField] int aicardNum2;
+    [SerializeField] bool aicardNumIsGwang2;
+
+
+
     private void Start()
     {
         DeckShuffle();
@@ -26,14 +39,26 @@ public class Deck : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            for (int i = 0; i < usedeck.Count; i++)
-            {
-                Debug.Log("usedeck : " + usedeck[i]);
-            }
-
+            TestCard();
         }
 
     }
+
+    //테스트용 카드 넣어주기
+    public void TestCard()
+    {
+        myCard[0].cardNum = cardNum1;
+        myCard[0].isGwang = cardNumIsGwang1;
+        myCard[1].cardNum = cardNum2;
+        myCard[1].isGwang = cardNumIsGwang2;
+
+        AiCard[0].cardNum = aicardNum1;
+        AiCard[0].isGwang = aicardNumIsGwang1;
+        AiCard[1].cardNum = aicardNum2;
+        AiCard[1].isGwang = aicardNumIsGwang2;
+
+    }
+
 
 
     //덱 셔플
