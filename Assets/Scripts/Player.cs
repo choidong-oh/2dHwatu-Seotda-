@@ -3,26 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public class Ai : MonoBehaviour
+{
+    public static int playerMoney;
+}
+
 public class Player : MonoBehaviour
 {
-    static int playerMoney;
-
-    static public int PlayerMoney
-    {
-        get { return playerMoney = 100000; }
-        set
-        {
-            if (value <= 0)
-            {
-                playerMoney = 0;
-            }
-            else
-            {
-                playerMoney = value;    
-            }
-        }
-    }
-
-
-
+    public static int playerMoney;
 }

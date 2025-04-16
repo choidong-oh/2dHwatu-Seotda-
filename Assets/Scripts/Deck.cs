@@ -15,7 +15,6 @@ public class Deck : MonoBehaviour
     public Transform[] AiCardSpawnPositions; //ai카드 놓는 위치
     int AiCardPostionArrayNum = 0; //놓는위치 배열
 
-    public event Action<int, bool> cardNumUi; //확인용 UI
     Card cardScript;
 
     [Header("테스트용 카드 value")]
@@ -102,8 +101,6 @@ public class Deck : MonoBehaviour
         //ai인지, player인지
         (isPlayer ? myCard : AiCard).Add(cardScript);
 
-        //ui용 이벤트
-        cardNumUi?.Invoke(cardScript.cardNum, cardScript.isGwang);
         Debug.Log("추가된 카드: " + cardScript.cardNum + ", 광: " + cardScript.isGwang);
     }
 
@@ -139,9 +136,6 @@ public class Deck : MonoBehaviour
         //Ai카드 초기화
         AiCard.Clear();
 
-
-        //ui용 이벤트
-        cardNumUi?.Invoke(0, false);
 
         // 카드 위치에 있는 자식 오브젝트 전부 삭제
         foreach (Transform spawn in PlayerCardSpawnPositions)
