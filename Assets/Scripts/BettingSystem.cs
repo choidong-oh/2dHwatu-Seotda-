@@ -29,21 +29,28 @@ public class BettingSystem : MonoBehaviour
         }
         switch (bettingName)
         {
-            case "Half":
-                beforeBettingMoney += (int)(beforeBettingMoney * 0.5);
+            case "Die":
+                //다이임**
+                break;
+
+            case "Bbing":
+                beforeBettingMoney = baseMoney;
                 break;
 
             case "Call":
                 beforeBettingMoney = beforeBettingMoney;
                 break;
 
-            case "DdaDang":
-                beforeBettingMoney = beforeBettingMoney*2;
+            case "Half":
+                beforeBettingMoney += (int)(beforeBettingMoney * 0.5);
                 break;
 
             case "AllIn":
                 beforeBettingMoney = money;
                 break;
+
+            
+            //임시로 리턴용?
             case "coffee":
                 break;
         }
