@@ -12,8 +12,6 @@ public class BettingSystem : MonoBehaviour
     public int baseMoney = 10000; //기본 배팅금
     public int mainPot = 0; //총배팅금 담을 변수
     public int beforeBettingMoney = 0; //이전 순서의 플레이어의 배팅금
-    public int PlayerSidePot = 0; // 
-    public int AiSidePot = 0; // 
 
     public void BaseBetting(ref int money)
     {
@@ -23,7 +21,7 @@ public class BettingSystem : MonoBehaviour
     }
 
     
-    public void Betting(string bettingName, ref int money, bool isPlayer)
+    public void Betting(string bettingName, ref int money)
     {
         if (bettingName == "coffee")
         {
@@ -31,16 +29,16 @@ public class BettingSystem : MonoBehaviour
         }
         switch (bettingName)
         {
-            case "Base":
-                beforeBettingMoney = baseMoney;
-                break;
-
             case "Half":
-                beforeBettingMoney = beforeBettingMoney * 2;
+                beforeBettingMoney += (int)(beforeBettingMoney * 0.5);
                 break;
 
             case "Call":
                 beforeBettingMoney = beforeBettingMoney;
+                break;
+
+            case "DdaDang":
+                beforeBettingMoney = beforeBettingMoney*2;
                 break;
 
             case "AllIn":
@@ -52,61 +50,45 @@ public class BettingSystem : MonoBehaviour
        
 
         mainPot += beforeBettingMoney;
-        if(money< beforeBettingMoney)
-        {
-            if (isPlayer)
-            {
-                AiSidePot += beforeBettingMoney - money;
-            }
-            else
-            {
-                PlayerSidePot += beforeBettingMoney - money;
-            }
-            money = 0;
-        }
-        else
-        {
-            money -= beforeBettingMoney;
-        }
+
+        money -= beforeBettingMoney;
+        
 
     }
     private bool BettingTrue(string bettingName, ref int money)
     {
-        // 플레이어가 할 수 없는 배팅 (Half, Call)
-        if (bettingName == "Half" || bettingName == "Call")
+        //내돈이 전배팅금보다 낮으면? 올인
+        //하프도 안되게해야대나? 아니면 그냥 하프까지 안되면 바로올인?
+        if (money < beforeBettingMoney)
         {
-            // Half나 Call은 이전 배팅이 0이거나, 플레이어가 가진 돈이 부족한 경우 사용할 수 없음
-            if (beforeBettingMoney == 0 || money < beforeBettingMoney)
-            {
-                return true; // 예외 상황
-            }
+            return true; // 예외 상황
         }
+
         return false; // 예외가 아닌 경우
     }
 
 
     public void AiBetting(string bettingName)
     {
-        //if (BettingTrue(bettingName,ref aiMoney))
-        //{
-        //    bettingName = "AllIn";
-        //}
-        Betting(bettingName, ref aiMoney,false);
+        if (BettingTrue(bettingName, ref aiMoney))
+        {
+            bettingName = "AllIn";
+        }
+        Betting(bettingName, ref aiMoney);
     }
     public void PlayerBetting(string bettingName)
     {
-        //if (BettingTrue(bettingName, ref playerMoney))
-        //{
-        //    bettingName = "AllIn";
-        //}
-        Betting(bettingName, ref playerMoney,true);
+        if (BettingTrue(bettingName, ref playerMoney))
+        {
+            bettingName = "AllIn";
+        }
+        Betting(bettingName, ref playerMoney);
     }
 
     public void ResetBetting()
     {
         mainPot = 0;
-        AiSidePot = 0;
-        PlayerSidePot = 0;
+       
         beforeBettingMoney = 0;
     }
 

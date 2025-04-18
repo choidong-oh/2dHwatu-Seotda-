@@ -97,9 +97,37 @@ public class Deck : MonoBehaviour
         GameObject cardObj = Instantiate(DeckPrefab[prefabIndex], spawnPos.position, spawnPos.rotation, spawnPos);
 
         cardScript = cardObj.GetComponent<Card>();
-        
+
         //ai인지, player인지
-        (isPlayer ? myCard : AiCard).Add(cardScript);
+        List<Card> targetCardList = isPlayer ? myCard : AiCard;
+        targetCardList.Add(cardScript);
+
+        // 카드 순서 비교해서 자리 바꾸기
+        if (targetCardList.Count == 2)
+        {
+            Card firstCard = targetCardList[0];
+            Card secondCard = targetCardList[1];
+
+            if (secondCard.cardNum < firstCard.cardNum)
+            {
+                // 위치 교환
+                Transform firstTransform = firstCard.transform;
+                Transform secondTransform = secondCard.transform;
+
+                Vector3 tempPos = firstTransform.position;
+                Quaternion tempRot = firstTransform.rotation;
+
+                firstTransform.position = secondTransform.position;
+                firstTransform.rotation = secondTransform.rotation;
+
+                secondTransform.position = tempPos;
+                secondTransform.rotation = tempRot;
+
+                // 리스트 내 순서도 바꿔주기 
+                targetCardList[0] = secondCard;
+                targetCardList[1] = firstCard;
+            }
+        }
 
         Debug.Log("추가된 카드: " + cardScript.cardNum + ", 광: " + cardScript.isGwang);
     }
@@ -114,6 +142,7 @@ public class Deck : MonoBehaviour
         int card = DrawCard();
         SpawnCard(true,card, PlayerCardSpawnPositions[PlayerCardPostionArrayNum]);
         PlayerCardPostionArrayNum++;
+        
     }
 
     public void AiSpawnCardBtn()
