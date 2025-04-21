@@ -12,12 +12,28 @@ public class GameManager : MonoBehaviour
     [SerializeField] WinnerSystem winnerSystem;
     [SerializeField] string aiBettingName;
 
+    [SerializeField] GameObject bettingBtn;
+
+
+
+
+    //기본배팅버튼 > 셔플,카드드로우 > 배팅 활성화 > 카드드로우 > 배팅활성화 > 승판결
+    private void Start()
+    {
+        //처음 ui 비활성화
+        bettingSystem.UiInteractableFalse();
+    }
 
     public void BaseBetting()
     {
         bettingSystem.ResetBetting();
         bettingSystem.BaseBetting(ref bettingSystem.playerMoney);
         bettingSystem.BaseBetting(ref bettingSystem.aiMoney);
+        bettingBtn.SetActive(false);
+
+        //셔플,카드드로우
+        DeckShuffle();
+        CardDraw();
     }
 
     public void DeckShuffle()
@@ -29,17 +45,32 @@ public class GameManager : MonoBehaviour
     {
         deck.PlayerSpawnCardBtn();
         deck.AiSpawnCardBtn();
+
+        //배팅활성화
+        bettingSystem.AllInTrue();
     }
 
     public void Betting(string bettingName)
     {
         bettingSystem.PlayerBetting(bettingName);
         bettingSystem.AiBetting(aiBettingName);
+
+        //카드드로우
+        if (bettingSystem.isSecondBet == false)
+        {
+            bettingSystem.isSecondBet = true;
+            bettingSystem.isFirstBet = false;
+            CardDraw();
+        }
+
     }
 
     public void Winner()
     {
         winnerSystem.Winner();
+        bettingSystem.isFirstBet = true;
+        bettingSystem.isSecondBet = false;
+        DeckShuffle();
 
     }
 
