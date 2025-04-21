@@ -25,6 +25,8 @@ public class BettingSystem : MonoBehaviour
     public bool isFirstBet = false;
     public bool isSecondBet = false;
 
+    public int BettingCount;
+
     public TextMeshProUGUI PlayerMoneyText;
     public TextMeshProUGUI AiMoneyText;
     public TextMeshProUGUI MainPotText;

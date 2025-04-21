@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
     {
         //처음 ui 비활성화
         bettingSystem.UiInteractableFalse();
+        bettingSystem.BettingCount = 0;
     }
 
     public void BaseBetting()
@@ -63,6 +64,13 @@ public class GameManager : MonoBehaviour
             CardDraw();
         }
 
+        bettingSystem.BettingCount++;
+
+        //두번 배팅하면 승판결로
+        if(bettingSystem.BettingCount >= 2)
+        {
+            Invoke("Winner", 2f);
+        }
     }
 
     public void Winner()
@@ -70,10 +78,11 @@ public class GameManager : MonoBehaviour
         winnerSystem.Winner();
         bettingSystem.isFirstBet = true;
         bettingSystem.isSecondBet = false;
+        bettingSystem.BettingCount = 0;
         DeckShuffle();
-
+        bettingBtn.SetActive(true);
     }
 
-
+    
 
 }
