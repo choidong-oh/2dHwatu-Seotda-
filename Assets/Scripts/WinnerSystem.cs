@@ -3,11 +3,17 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
+    public enum WhoWinner
+    {
+        PlayerWin = 0, AiWin, Draw, x
+    }
+
 public class WinnerSystem : MonoBehaviour
 {
+
     [SerializeField] Deck deck;
 
-    public void Winner()
+    public int Winner()
     {
         List<int> PlayerPoint = Jokbo.instance.JokboPoint(deck.myCard[0], deck.myCard[1]);
         List<int> AiPoint = Jokbo.instance.JokboPoint(deck.AiCard[0], deck.AiCard[1]);
@@ -38,9 +44,9 @@ public class WinnerSystem : MonoBehaviour
             else if (aiSpecial == 3 && aiScore < 200)
             {
                 result = "Draw";
-            } 
+            }
             else
-            { 
+            {
                 result = pScore > aiScore ? "PlayerWin" : (pScore < aiScore ? "AiWin" : "Draw");
             }
         }
@@ -91,6 +97,21 @@ public class WinnerSystem : MonoBehaviour
 
         Debug.Log(result);
 
+        int WhoWin;
+        //enum으로 바꿀거임
+        if(result == "PlayerWin")
+        {
+            WhoWin = 0;
+        }
+        else if(result == "AiWin")
+        {
+            WhoWin = 1;
+        }
+        else
+        {
+            WhoWin = 2;
+        }
+        return WhoWin;
     }
 
 
