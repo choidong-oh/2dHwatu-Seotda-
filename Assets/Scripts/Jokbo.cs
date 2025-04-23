@@ -31,6 +31,7 @@ public class Jokbo : MonoBehaviour
         {
             JokboPoint.Add(1001);
             JokboPoint.Add(0);
+            JokboPoint.Add(1);
             Debug.Log("38堡动");
             return JokboPoint;
         }
@@ -38,6 +39,7 @@ public class Jokbo : MonoBehaviour
         {
             JokboPoint.Add(951);
             JokboPoint.Add(0);
+            JokboPoint.Add(2);
             Debug.Log("13堡动");
             return JokboPoint;
         }
@@ -45,6 +47,7 @@ public class Jokbo : MonoBehaviour
         {
             JokboPoint.Add(951);
             JokboPoint.Add(0);
+            JokboPoint.Add(2);
             Debug.Log("18堡动");
             return JokboPoint;
         }
@@ -54,6 +57,7 @@ public class Jokbo : MonoBehaviour
         {
             JokboPoint.Add(100 + mycard1.cardNum * 10);
             JokboPoint.Add(0);
+            JokboPoint.Add(3);
             Debug.Log("厘动");
             return JokboPoint;
         }
@@ -61,6 +65,7 @@ public class Jokbo : MonoBehaviour
         {
             JokboPoint.Add(100 + mycard1.cardNum * 10);
             JokboPoint.Add(0);
+            JokboPoint.Add(3);
             Debug.Log("9动");
             return JokboPoint;
         }
@@ -68,6 +73,7 @@ public class Jokbo : MonoBehaviour
         {
             JokboPoint.Add(100 + mycard1.cardNum * 10);
             JokboPoint.Add(0);
+            JokboPoint.Add(3);
             Debug.Log("8动");
             return JokboPoint;
         }
@@ -75,6 +81,7 @@ public class Jokbo : MonoBehaviour
         {
             JokboPoint.Add(100 + mycard1.cardNum * 10);
             JokboPoint.Add(0);
+            JokboPoint.Add(3);
             Debug.Log("7动");
             return JokboPoint;
         }
@@ -82,6 +89,7 @@ public class Jokbo : MonoBehaviour
         {
             JokboPoint.Add(100 + mycard1.cardNum * 10);
             JokboPoint.Add(0);
+            JokboPoint.Add(3);
             Debug.Log("6动");
             return JokboPoint;
         }
@@ -89,6 +97,7 @@ public class Jokbo : MonoBehaviour
         {
             JokboPoint.Add(100 + mycard1.cardNum * 10);
             JokboPoint.Add(0);
+            JokboPoint.Add(3);
             Debug.Log("5动");
             return JokboPoint;
         }
@@ -96,6 +105,7 @@ public class Jokbo : MonoBehaviour
         {
             JokboPoint.Add(100 + mycard1.cardNum * 10);
             JokboPoint.Add(0);
+            JokboPoint.Add(3);
             Debug.Log("4动");
             return JokboPoint;
         }
@@ -103,6 +113,7 @@ public class Jokbo : MonoBehaviour
         {
             JokboPoint.Add(100 + mycard1.cardNum * 10);
             JokboPoint.Add(0);
+            JokboPoint.Add(3);
             Debug.Log("3动");
             return JokboPoint;
         }
@@ -110,6 +121,7 @@ public class Jokbo : MonoBehaviour
         {
             JokboPoint.Add(100 + mycard1.cardNum * 10);
             JokboPoint.Add(0);
+            JokboPoint.Add(3);
             Debug.Log("2动");
             return JokboPoint;
         }
@@ -117,6 +129,7 @@ public class Jokbo : MonoBehaviour
         {
             JokboPoint.Add(100 + mycard1.cardNum * 10);
             JokboPoint.Add(0);
+            JokboPoint.Add(3);
             Debug.Log("1动");
             return JokboPoint;
         }
@@ -126,6 +139,7 @@ public class Jokbo : MonoBehaviour
         {
             JokboPoint.Add(56);
             JokboPoint.Add(0);
+            JokboPoint.Add(4);
             Debug.Log("舅府");
             return JokboPoint;
         }
@@ -133,6 +147,7 @@ public class Jokbo : MonoBehaviour
         {
             JokboPoint.Add(55);
             JokboPoint.Add(0);
+            JokboPoint.Add(5);
             Debug.Log("刀荤");
             return JokboPoint;
         }
@@ -140,6 +155,7 @@ public class Jokbo : MonoBehaviour
         {
             JokboPoint.Add(54);
             JokboPoint.Add(0);
+            JokboPoint.Add(6);
             Debug.Log("备绘");
             return JokboPoint;
         }
@@ -147,13 +163,15 @@ public class Jokbo : MonoBehaviour
         {
             JokboPoint.Add(53);
             JokboPoint.Add(0);
+            JokboPoint.Add(7);
             Debug.Log("厘绘");
             return JokboPoint;
         }
         else if (mycard1.cardNum == 4 && mycard2.cardNum == 10)
         {
             JokboPoint.Add(52);
-            JokboPoint.Add(0);
+            JokboPoint.Add(0); 
+            JokboPoint.Add(8);
             Debug.Log("厘荤");
             return JokboPoint;
         }
@@ -161,6 +179,7 @@ public class Jokbo : MonoBehaviour
         {
             JokboPoint.Add(51);
             JokboPoint.Add(0);
+            JokboPoint.Add(9);
             Debug.Log("技氟");
             return JokboPoint;
         }
@@ -170,6 +189,7 @@ public class Jokbo : MonoBehaviour
         {
             JokboPoint.Add(0); // No points
             JokboPoint.Add(1); // Special case flag
+            JokboPoint.Add(10);
             Debug.Log("动棱捞");
             return JokboPoint;
         }
@@ -179,6 +199,7 @@ public class Jokbo : MonoBehaviour
         {
             JokboPoint.Add(1); // 1 point
             JokboPoint.Add(2); // Special case flag
+            JokboPoint.Add(11);
             Debug.Log("鞠青绢荤");
             return JokboPoint;
         }
@@ -188,6 +209,7 @@ public class Jokbo : MonoBehaviour
         {
             JokboPoint.Add(3); // Special points
             JokboPoint.Add(3); // Special case flag
+            JokboPoint.Add(12);
             Debug.Log("港胖备府 备荤");
             return JokboPoint;
         }
@@ -201,7 +223,8 @@ public class Jokbo : MonoBehaviour
             }
 
             JokboPoint.Add(jokboPoint);
-            JokboPoint.Add(0);
+            JokboPoint.Add(0); 
+            JokboPoint.Add(13);
             Debug.Log(jokboPoint + "昌");
             return JokboPoint;
         }

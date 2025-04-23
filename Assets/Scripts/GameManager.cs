@@ -4,25 +4,30 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-//4. 승패판결 string > enum으로 
-//5. ai로직
-//6. 족보
+//1. ui레이아웃해서하면될듯
+//2. ai도 올인으로
 //3. json으로 playermoney static개념으로
-//7. 밸런스 조정
 //8. mainpot을 스태틱으로 start에서 ai한테 주고시작, 나갓을때 방지
-//9. 게임메뉴 씬, 충전할수잇게
+//9. 게임메뉴 씬, 충전할수잇게, 게임끝 
 //10. ui자리배치
+//7. 밸런스 조정
 public class GameManager : MonoBehaviour
 {
     //기본배팅 > 카드분배 > 배팅 > 카드분배 > 배팅 > 승판결
     [SerializeField] BettingSystem bettingSystem;
     [SerializeField] Deck deck;
     [SerializeField] WinnerSystem winnerSystem;
-    [SerializeField] string aiBettingName;
+    [SerializeField] JokboUi jokboUi;
+    [SerializeField] Jokbo jokbo;
+    [SerializeField] AiBetting aiBetting;
+
 
     [SerializeField] GameObject bettingBtn;
 
+    [SerializeField] GameObject IsDrawObj;
     bool isDraw;
+    int CardDrawCount;
+
 
 
 
@@ -32,6 +37,8 @@ public class GameManager : MonoBehaviour
         //처음 ui 비활성화
         bettingSystem.UiInteractableFalse();
         bettingSystem.BettingCount = 0;
+        CardDrawCount = 0;
+        
     }
 
     public void BaseBetting()
@@ -53,6 +60,7 @@ public class GameManager : MonoBehaviour
         //셔플,카드드로우
         DeckShuffle();
         CardDraw();
+        
     }
 
     public void DeckShuffle()
@@ -67,6 +75,16 @@ public class GameManager : MonoBehaviour
 
         //배팅활성화
         bettingSystem.AllInTrue();
+
+        //2번쨰카드드로우
+        CardDrawCount++;
+        if (CardDrawCount >= 2)
+        {
+            var Whatjokbo = jokbo.JokboPoint(deck.myCard[0], deck.myCard[1])[2];
+            //족보이미지
+            jokboUi.HighlightRank(Whatjokbo, Color.yellow);
+        }
+
     }
 
     public void Betting(string bettingName)
@@ -80,9 +98,10 @@ public class GameManager : MonoBehaviour
             ResetBtn();
             return;
         }
-        bettingSystem.AiBetting(aiBettingName);
+        aiBetting.RandomAiBetting2();
+        bettingSystem.AiBetting(aiBetting.aiBettingName);
         //AI가 다이한거임
-        if (aiBettingName == "Die")
+        if (aiBetting.aiBettingName == "Die")
         {
             bettingSystem.isDie = false;
             bettingSystem.playerMoney += bettingSystem.mainPot;
@@ -135,6 +154,7 @@ public class GameManager : MonoBehaviour
         else if (winnerResult == 2)
         {
             isDraw =true;
+            IsDrawObj.SetActive(true);
             Debug.Log("무승부입니다.");
         }
 
@@ -151,12 +171,15 @@ public class GameManager : MonoBehaviour
 
     public void ResetBtn()
     {
+        jokboUi.ResetJokboUi();
         bettingSystem.isFirstBet = true;
         bettingSystem.isSecondBet = false;
         bettingSystem.BettingCount = 0;
         DeckShuffle();
         bettingBtn.SetActive(true);
-        if(isDraw == true)
+        CardDrawCount = 0;
+        IsDrawObj.SetActive(false);
+        if (isDraw == true)
         {
             isDraw= false;
             DrawBetting();

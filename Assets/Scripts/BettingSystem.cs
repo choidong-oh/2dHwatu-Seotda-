@@ -93,7 +93,7 @@ public class BettingSystem : MonoBehaviour
 
     public void AiBetting(string bettingName)
     {
-        if((int)(mainPot * 0.5)>=aiMoney || beforeBettingMoney>=aiMoney)
+        if((int)(mainPot * 0.5)+ beforeBettingMoney >= aiMoney || beforeBettingMoney>=aiMoney)
         {
             Debug.Log("¤·¤¤¤·");
             bettingName = "AllIn";
@@ -164,7 +164,16 @@ public class BettingSystem : MonoBehaviour
 
     private void Update()
     {
-        MainPotText.text = mainPot.ToString();
+        if (mainPot <= 0)
+        {
+            MainPotText.text ="";
+        }
+
+        if(mainPot > 0)    
+        {
+            MainPotText.text = mainPot.ToString();
+        }
+
         PlayerMoneyText.text = playerMoney.ToString();  
         AiMoneyText.text = aiMoney.ToString();
 
