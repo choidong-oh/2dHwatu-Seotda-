@@ -28,12 +28,11 @@ public class Deck : MonoBehaviour
     [SerializeField] int aicardNum2;
     [SerializeField] bool aicardNumIsGwang2;
 
-
-
-    private void Start()
+    public void DeckStart()
     {
         DeckShuffle();
     }
+
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Q))

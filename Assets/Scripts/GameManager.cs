@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.UI;
 
-//1. ui레이아웃해서하면될듯
-//2. ai도 올인으로
-//3. json으로 playermoney static개념으로
-//8. mainpot을 스태틱으로 start에서 ai한테 주고시작, 나갓을때 방지
-//9. 게임메뉴 씬, 충전할수잇게, 게임끝 
-//10. ui자리배치
+//9. 드로우시 족보 초기화
+//10. ui자리배치, ui레이아웃해서하면될듯(해상도대응)
 //7. 밸런스 조정
+//15.마지막 이쁘게 만들기, 천천히
 public class GameManager : MonoBehaviour
 {
     //기본배팅 > 카드분배 > 배팅 > 카드분배 > 배팅 > 승판결
@@ -20,11 +18,12 @@ public class GameManager : MonoBehaviour
     [SerializeField] JokboUi jokboUi;
     [SerializeField] Jokbo jokbo;
     [SerializeField] AiBetting aiBetting;
-
+    [SerializeField] JsonManager jsonManager;
 
     [SerializeField] GameObject bettingBtn;
-
     [SerializeField] GameObject IsDrawObj;
+
+    [SerializeField] Button SceneChangeBtn;
     bool isDraw;
     int CardDrawCount;
 
@@ -34,19 +33,32 @@ public class GameManager : MonoBehaviour
     //기본배팅버튼 > 셔플,카드드로우 > 배팅 활성화 > 카드드로우 > 배팅활성화 > 승판결
     private void Start()
     {
+        jsonManager.JsonStart();
+        deck.DeckStart();
+        jokboUi.JokboUiStart();
+
+        //돈 불러오기
+        jsonManager.MoneyLoad();
+
         //처음 ui 비활성화
         bettingSystem.UiInteractableFalse();
         bettingSystem.BettingCount = 0;
         CardDrawCount = 0;
-        
+
+        //test
+        SceneChangeBtn.onClick.AddListener(()=> SceneChangeManager.instance.SceneChange("0"));
     }
 
     public void BaseBetting()
     {
+        bettingSystem.UiInteractableFalse();
         bettingSystem.ResetBetting();
-        bettingSystem.BaseBetting(ref bettingSystem.playerMoney);
-        bettingSystem.BaseBetting(ref bettingSystem.aiMoney);
+        bettingSystem.BaseBetting(ref Player.playerMoney);
+        bettingSystem.BaseBetting(ref Ai.AiMoney);
         bettingBtn.SetActive(false);
+
+        //json 돈저장
+        jsonManager.MoneySave();
 
         //셔플,카드드로우
         DeckShuffle();
@@ -56,7 +68,7 @@ public class GameManager : MonoBehaviour
     void DrawBetting()
     {
         bettingBtn.SetActive(false);
-
+        jokboUi.ResetJokboUi();
         //셔플,카드드로우
         DeckShuffle();
         CardDraw();
@@ -94,7 +106,8 @@ public class GameManager : MonoBehaviour
         if(bettingName == "Die")
         {
             bettingSystem.isDie = false;
-            bettingSystem.aiMoney += bettingSystem.mainPot;
+            Ai.AiMoney += BettingSystem.mainPot;
+            BettingSystem.mainPot = 0;
             ResetBtn();
             return;
         }
@@ -104,12 +117,15 @@ public class GameManager : MonoBehaviour
         if (aiBetting.aiBettingName == "Die")
         {
             bettingSystem.isDie = false;
-            bettingSystem.playerMoney += bettingSystem.mainPot;
+            Player.playerMoney += BettingSystem.mainPot;
+            BettingSystem.mainPot = 0;
             ResetBtn();
             return;
         }
         Debug.Log("dsds");
 
+        //json 돈저장
+        jsonManager.MoneySave();
 
         //카드드로우
         if (bettingSystem.isSecondBet == false)
@@ -143,13 +159,13 @@ public class GameManager : MonoBehaviour
         {
             winnerCards = deck.myCard;
 
-            bettingSystem.playerMoney += bettingSystem.mainPot;
+            Player.playerMoney += BettingSystem.mainPot;
         }
         else if (winnerResult == 1)
         {
             winnerCards = deck.AiCard;
 
-            bettingSystem.aiMoney += bettingSystem.mainPot;
+            Ai.AiMoney += BettingSystem.mainPot;
         }
         else if (winnerResult == 2)
         {
@@ -157,6 +173,9 @@ public class GameManager : MonoBehaviour
             IsDrawObj.SetActive(true);
             Debug.Log("무승부입니다.");
         }
+
+        //json 돈저장
+        jsonManager.MoneySave();
 
         //이긴 카드 스케일 키움
         if (winnerResult != 2)
@@ -167,16 +186,58 @@ public class GameManager : MonoBehaviour
                 card.transform.localScale = sd * Vector2.one * 1.5f;
             }
         }
+
+        if (isDraw == false)
+        {
+            //게임엔딩
+            GameEnding(Player.playerMoney, true);
+            GameEnding(Ai.AiMoney, false);
+        }
+    }
+
+    void GameEnding(int Money, bool isPlayer)
+    {
+        if (isPlayer == true)
+        {
+            //게임 엔딩
+            if (Money <= bettingSystem.baseMoney)
+            {
+                BettingSystem.mainPot = 0;
+                jsonManager.MoneySave();
+                SceneChangeManager.instance.SceneChange("0");
+            }
+        }
+        else if(isPlayer == false) 
+        {
+            //게임 엔딩
+            if (Money <= bettingSystem.baseMoney)
+            {
+                BettingSystem.mainPot = 0;
+                jsonManager.MoneySave();
+                SceneChangeManager.instance.SceneChange("2");
+            }
+        }
+       
     }
 
     public void ResetBtn()
     {
+        bettingSystem.UiInteractableFalse();
         jokboUi.ResetJokboUi();
         bettingSystem.isFirstBet = true;
         bettingSystem.isSecondBet = false;
         bettingSystem.BettingCount = 0;
+
         DeckShuffle();
-        bettingBtn.SetActive(true);
+        if(Player.playerMoney <=bettingSystem.baseMoney)
+        {
+            GameEnding(Player.playerMoney, true);
+        }
+        else if(Ai.AiMoney <= bettingSystem.baseMoney)
+        {
+            GameEnding(Ai.AiMoney, false);
+        }
+            bettingBtn.SetActive(true);
         CardDrawCount = 0;
         IsDrawObj.SetActive(false);
         if (isDraw == true)
@@ -189,6 +250,9 @@ public class GameManager : MonoBehaviour
         {
             bettingSystem.ResetBetting();
         }
+
+        //json 돈저장
+        jsonManager.MoneySave();
     }
     
 

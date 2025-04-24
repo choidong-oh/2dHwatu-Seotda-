@@ -27,7 +27,7 @@ public class JokboUi : MonoBehaviour
 
     public GameObject[] JokboTextPrefab;
 
-    private void Start()
+    public void JokboUiStart()
     {
         foreach (GameObject prefab in JokboTextPrefab)
         {

@@ -8,11 +8,11 @@ using UnityEngine.UI;
 public class BettingSystem : MonoBehaviour
 {
     [Header("임시")]
-    public int playerMoney = 1000000;//플레이어 돈
-    public int aiMoney = 1000000; //ai돈
+    //public int playerMoney = 1000000;//플레이어 돈
+    //public int aiMoney = 1000000; //ai돈
 
     public int baseMoney = 50000; //기본 배팅금
-    public int mainPot = 0; //총배팅금 담을 변수
+    static public int mainPot = 0; //총배팅금 담을 변수
     public int beforeBettingMoney = 0; //이전 순서의 플레이어의 배팅금
 
     public Button dieButton;
@@ -93,18 +93,18 @@ public class BettingSystem : MonoBehaviour
 
     public void AiBetting(string bettingName)
     {
-        if((int)(mainPot * 0.5)+ beforeBettingMoney >= aiMoney || beforeBettingMoney>=aiMoney)
+        if((int)(mainPot * 0.5)+ beforeBettingMoney >= Ai.AiMoney || beforeBettingMoney>= Ai.AiMoney)
         {
             Debug.Log("ㅇㄴㅇ");
             bettingName = "AllIn";
         }
 
-        Betting(bettingName, ref aiMoney);
+        Betting(bettingName, ref Ai.AiMoney);
         AiBettingNameText.text = bettingName;
     }
     public void PlayerBetting(string bettingName)
     {
-        Betting(bettingName, ref playerMoney);
+        Betting(bettingName, ref Player.playerMoney);
     }
 
     public void ResetBetting()
@@ -124,7 +124,7 @@ public class BettingSystem : MonoBehaviour
 
 
         // 올인 아닌 경우 버튼 활성화
-        if (beforeBettingMoney < playerMoney)
+        if (beforeBettingMoney < Player.playerMoney)
         {
             dieButton.interactable = true;
             bbingButton.interactable = true;
@@ -132,15 +132,17 @@ public class BettingSystem : MonoBehaviour
             halfButton.interactable = true;
         }
         //하프가 안돼냐?
-        if ((int)(mainPot * 0.5) > playerMoney)
+        if ((int)(mainPot * 0.5)+ beforeBettingMoney > Player.playerMoney)
         {
             halfButton.interactable = false;
+            dieButton.interactable = true;
         }
         //콜이 안돼냐?
-        if (beforeBettingMoney >= playerMoney)
+        if (beforeBettingMoney >= Player.playerMoney)
         {
             dieButton.interactable = true;
             allInButton.interactable = true;
+            bbingButton.interactable = false ;
         }
 
 
@@ -174,15 +176,8 @@ public class BettingSystem : MonoBehaviour
             MainPotText.text = mainPot.ToString();
         }
 
-        PlayerMoneyText.text = playerMoney.ToString();  
-        AiMoneyText.text = aiMoney.ToString();
-
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-
-            //올인인지
-            AllInTrue();
-        }
+        PlayerMoneyText.text = Player.playerMoney.ToString();  
+        AiMoneyText.text = Ai.AiMoney.ToString();
 
 
     }
