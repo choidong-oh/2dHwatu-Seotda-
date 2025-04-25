@@ -5,7 +5,8 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
 
-//9. 드로우시 족보 초기화
+//9. 올인일경우 바로 넘어감
+//10. 비김나왔을때 씬이 넘어감
 //10. ui자리배치, ui레이아웃해서하면될듯(해상도대응)
 //7. 밸런스 조정
 //15.마지막 이쁘게 만들기, 천천히
@@ -150,7 +151,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void Winner()
+    IEnumerator WinnerCor()
     {
         int winnerResult = winnerSystem.Winner();
 
@@ -169,7 +170,7 @@ public class GameManager : MonoBehaviour
         }
         else if (winnerResult == 2)
         {
-            isDraw =true;
+            isDraw = true;
             IsDrawObj.SetActive(true);
             Debug.Log("무승부입니다.");
         }
@@ -187,12 +188,20 @@ public class GameManager : MonoBehaviour
             }
         }
 
+        yield return new WaitForSeconds(2f);
+
         if (isDraw == false)
         {
             //게임엔딩
             GameEnding(Player.playerMoney, true);
             GameEnding(Ai.AiMoney, false);
         }
+
+    }
+
+    public void Winner()
+    {
+        StartCoroutine(WinnerCor());
     }
 
     void GameEnding(int Money, bool isPlayer)
@@ -229,15 +238,8 @@ public class GameManager : MonoBehaviour
         bettingSystem.BettingCount = 0;
 
         DeckShuffle();
-        if(Player.playerMoney <=bettingSystem.baseMoney)
-        {
-            GameEnding(Player.playerMoney, true);
-        }
-        else if(Ai.AiMoney <= bettingSystem.baseMoney)
-        {
-            GameEnding(Ai.AiMoney, false);
-        }
-            bettingBtn.SetActive(true);
+       
+        bettingBtn.SetActive(true);
         CardDrawCount = 0;
         IsDrawObj.SetActive(false);
         if (isDraw == true)
@@ -248,6 +250,14 @@ public class GameManager : MonoBehaviour
         }
         else if(isDraw == false)
         {
+            if (Player.playerMoney <= bettingSystem.baseMoney)
+            {
+                GameEnding(Player.playerMoney, true);
+            }
+            else if (Ai.AiMoney <= bettingSystem.baseMoney)
+            {
+                GameEnding(Ai.AiMoney, false);
+            }
             bettingSystem.ResetBetting();
         }
 
