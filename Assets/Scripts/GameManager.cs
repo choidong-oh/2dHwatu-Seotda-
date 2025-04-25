@@ -5,11 +5,14 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
 
-//9. 올인일경우 바로 넘어감
 //10. 비김나왔을때 씬이 넘어감
+//11. 비겻을때 엔딩
 //10. ui자리배치, ui레이아웃해서하면될듯(해상도대응)
 //7. 밸런스 조정
 //15.마지막 이쁘게 만들기, 천천히
+//16. 엔딩씬 
+//17. ai 카드 숨김
+//19. 생성 2로감 왠지모름
 public class GameManager : MonoBehaviour
 {
     //기본배팅 > 카드분배 > 배팅 > 카드분배 > 배팅 > 승판결
@@ -188,15 +191,9 @@ public class GameManager : MonoBehaviour
             }
         }
 
+        Debug.Log("isDraw: " + isDraw);  // 코루틴이 시작되기 전에
         yield return new WaitForSeconds(2f);
-
-        if (isDraw == false)
-        {
-            //게임엔딩
-            GameEnding(Player.playerMoney, true);
-            GameEnding(Ai.AiMoney, false);
-        }
-
+        Debug.Log("isDraw (after wait): " + isDraw);  // 2초 후 상태
     }
 
     public void Winner()
@@ -231,6 +228,14 @@ public class GameManager : MonoBehaviour
 
     public void ResetBtn()
     {
+        if (isDraw == false)
+        {
+            Debug.Log("end13");
+            //게임엔딩
+            GameEnding(Player.playerMoney, true);
+            GameEnding(Ai.AiMoney, false);
+        }
+
         bettingSystem.UiInteractableFalse();
         jokboUi.ResetJokboUi();
         bettingSystem.isFirstBet = true;
@@ -244,6 +249,7 @@ public class GameManager : MonoBehaviour
         IsDrawObj.SetActive(false);
         if (isDraw == true)
         {
+            Debug.Log("너냐?");
             isDraw= false;
             DrawBetting();
 
@@ -256,6 +262,7 @@ public class GameManager : MonoBehaviour
             }
             else if (Ai.AiMoney <= bettingSystem.baseMoney)
             {
+                Debug.Log("end12");
                 GameEnding(Ai.AiMoney, false);
             }
             bettingSystem.ResetBetting();

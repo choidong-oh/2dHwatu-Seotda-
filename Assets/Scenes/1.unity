@@ -281,13 +281,13 @@ MonoBehaviour:
   AiCardSpawnPositions:
   - {fileID: 1939596729}
   - {fileID: 570406134}
-  cardNum1: 3
+  cardNum1: 4
   cardNumIsGwang1: 1
-  cardNum2: 7
+  cardNum2: 9
   cardNumIsGwang2: 0
-  aicardNum1: 9
+  aicardNum1: 5
   aicardNumIsGwang1: 0
-  aicardNum2: 9
+  aicardNum2: 5
   aicardNumIsGwang2: 0
 --- !u!1 &197631849
 GameObject:
