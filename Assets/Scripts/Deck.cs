@@ -163,6 +163,9 @@ public class Deck : MonoBehaviour
         myCard.Clear();
         //Ai카드 초기화
         AiCard.Clear();
+        //카드위치 인덱스 초기화
+        PlayerCardPostionArrayNum = 0;
+        AiCardPostionArrayNum = 0;
 
 
         // 카드 위치에 있는 자식 오브젝트 전부 삭제
