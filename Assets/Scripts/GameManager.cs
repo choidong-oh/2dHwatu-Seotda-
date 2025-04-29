@@ -5,12 +5,8 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
 
-//10. 비김나왔을때 씬이 넘어감
-//11. 비겻을때 엔딩
 //7. 밸런스 조정
-//15.마지막 이쁘게 만들기, 천천히
 //16. 엔딩씬 
-//17. ai 카드 숨김
 public class GameManager : MonoBehaviour
 {
     //기본배팅 > 카드분배 > 배팅 > 카드분배 > 배팅 > 승판결

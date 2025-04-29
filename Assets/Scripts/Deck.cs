@@ -152,7 +152,13 @@ public class Deck : MonoBehaviour
         }
         int card = DrawCard();
         SpawnCard(false,card, AiCardSpawnPositions[AiCardPostionArrayNum]);
+        AiSpawnCardBtnFalse();
         AiCardPostionArrayNum++;
+    }
+
+    public void AiSpawnCardBtnFalse()
+    {
+        Instantiate(DeckPrefab[20], AiCardSpawnPositions[AiCardPostionArrayNum].position, AiCardSpawnPositions[AiCardPostionArrayNum].rotation, AiCardSpawnPositions[AiCardPostionArrayNum]);
     }
 
     void ResetCard()
