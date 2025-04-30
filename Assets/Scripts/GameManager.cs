@@ -5,8 +5,11 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
 
-//7. 밸런스 조정
+//18. 사운드
 //16. 엔딩씬 
+//7.  ui 버튼 다시
+//19. 출시이미지? 
+
 public class GameManager : MonoBehaviour
 {
     //기본배팅 > 카드분배 > 배팅 > 카드분배 > 배팅 > 승판결
@@ -21,7 +24,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject bettingBtn;
     [SerializeField] GameObject IsDrawObj;
 
-    [SerializeField] Button SceneChangeBtn;
+    [SerializeField] GameObject SettingObj;
     bool isDraw;
     int CardDrawCount;
 
@@ -43,8 +46,6 @@ public class GameManager : MonoBehaviour
         bettingSystem.BettingCount = 0;
         CardDrawCount = 0;
 
-        //test
-        SceneChangeBtn.onClick.AddListener(()=> SceneChangeManager.instance.SceneChange("0"));
     }
 
     public void BaseBetting()
@@ -82,7 +83,7 @@ public class GameManager : MonoBehaviour
     {
         deck.PlayerSpawnCardBtn();
         deck.AiSpawnCardBtn();
-
+        
         //배팅활성화
         bettingSystem.AllInTrue();
 
@@ -185,9 +186,15 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        Debug.Log("isDraw: " + isDraw);  // 코루틴이 시작되기 전에
-        yield return new WaitForSeconds(2f);
-        Debug.Log("isDraw (after wait): " + isDraw);  // 2초 후 상태
+        //Ai카드 2번째꺼 삭제(뒷면 삭제)
+        foreach (Transform spawn in deck.AiCardSpawnPositions)
+        {
+            Destroy(spawn.GetChild(1).gameObject);
+        }
+
+
+        //간지용
+        yield return new WaitForSeconds(2f); 
     }
 
     public void Winner()
@@ -214,7 +221,7 @@ public class GameManager : MonoBehaviour
             {
                 BettingSystem.mainPot = 0;
                 jsonManager.MoneySave();
-                SceneChangeManager.instance.SceneChange("2");
+                SceneChangeManager.instance.SceneChange("0");
             }
         }
        
@@ -266,7 +273,19 @@ public class GameManager : MonoBehaviour
         jsonManager.MoneySave();
     }
     
+    public void Setting(bool isTrue)
+    {
+        SettingObj.gameObject.SetActive(isTrue);
+    }
 
-    
+    public void SceneChange()
+    {
+        SceneChangeManager.instance.SceneChange("0");
+    }
 
+    public void Quit()
+    {
+        Debug.Log("Quit");  
+        Application.Quit();
+    }
 }

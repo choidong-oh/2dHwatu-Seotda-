@@ -16,6 +16,7 @@ public class SceneChangeManager : MonoBehaviour
 
     [SerializeField] TextMeshProUGUI PlayerMoney;
     [SerializeField] JsonManager jsonManager;
+    [SerializeField] GameObject InformationObj;
 
     public int ChargeMoney = 1000000;
 
@@ -63,4 +64,16 @@ public class SceneChangeManager : MonoBehaviour
         jsonManager.MoneySave();
     }
 
+    public void Quit()
+    {
+        Debug.Log("quit");
+        Application.Quit();
+    }
+
+    public void Information(bool isTrue)
+    {
+        InformationObj.SetActive(isTrue);
+    }
+
+    
 }
