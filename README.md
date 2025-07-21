@@ -5,7 +5,7 @@
 
 ## 2. 사용툴
 - **언어**: C#
-- **개발환경**: Unity
+- **개발환경**: Unity, Git
 - **IDE**: Visual Studio
 
 ## 3. 기간
